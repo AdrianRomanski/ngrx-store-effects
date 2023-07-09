@@ -1,1 +1,2 @@
-export * from './pizza.action';
+export * from "./pizzas.action";
+export * from "./toppings.action";

@@ -1,5 +1,5 @@
+import * as fromPizzas from "../actions/pizzas.action";
 import { Pizza } from "../../models/pizza.model";
-import { PizzaAction } from "../actions";
 
 export interface PizzaState {
   entities: { [id: number]: Pizza };
@@ -7,36 +7,26 @@ export interface PizzaState {
   loading: boolean;
 }
 
-export const initialState = {
-  // @ts-ignore
+export const initialState: PizzaState = {
   entities: {},
   loaded: false,
   loading: false,
 };
 
 export function reducer(
-  // @ts-ignore
   state = initialState,
-  action: PizzaAction,
+  action: fromPizzas.PizzasAction,
 ): PizzaState {
   switch (action.type) {
-    case "[Products] Load Pizzas": {
+    case fromPizzas.LOAD_PIZZAS: {
       return {
         ...state,
         loading: true,
       };
     }
-    case "[Products] Load Pizzas Fail": {
-      return {
-        ...state,
-        loading: false,
-        loaded: true,
-      };
-    }
-    case "[Products] Load Pizzas Success": {
-      const pizzas = action.payload;
 
-      const entities = pizzas.reduce(
+    case fromPizzas.LOAD_PIZZAS_SUCCESS: {
+      const entities = action.payload.reduce(
         (entities: { [id: number]: Pizza }, pizza: Pizza) => {
           return {
             ...entities,
@@ -47,13 +37,27 @@ export function reducer(
           ...state.entities,
         },
       );
+
       return {
         ...state,
+        loading: false,
+        loaded: true,
         entities,
+      };
+    }
+
+    case fromPizzas.LOAD_PIZZAS_FAIL: {
+      return {
+        ...state,
         loading: false,
         loaded: false,
       };
     }
   }
+
   return state;
 }
+
+export const getPizzasEntities = (state: PizzaState) => state.entities;
+export const getPizzasLoading = (state: PizzaState) => state.loading;
+export const getPizzasLoaded = (state: PizzaState) => state.loaded;

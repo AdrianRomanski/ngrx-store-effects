@@ -1,15 +1,9 @@
 import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 
-import { Pizza } from "../../models/pizza.model";
-import { PizzasService } from "../../services";
 import { Store } from "@ngrx/store";
-import {
-  getAllPizzas,
-  getAllPizzasArray,
-  LoadPizzas,
-  ProductsState,
-} from "../../store";
 import { Observable } from "rxjs/Observable";
+import * as fromStore from "../../store";
+import { Pizza } from "../../models/pizza.model";
 
 @Component({
   selector: "products",
@@ -32,10 +26,11 @@ import { Observable } from "rxjs/Observable";
 export class ProductsComponent implements OnInit {
   pizzas$: Observable<Pizza[]>;
 
-  constructor(private store: Store<ProductsState>) {}
+  constructor(private store: Store<fromStore.ProductsState>) {}
 
   ngOnInit() {
-    this.store.dispatch(new LoadPizzas());
-    this.pizzas$ = this.store.select(getAllPizzasArray);
+    this.pizzas$ = this.store.select(fromStore.getAllPizzas);
+    this.store.dispatch(new fromStore.LoadPizzas());
+    this.store.dispatch(new fromStore.LoadToppings());
   }
 }
