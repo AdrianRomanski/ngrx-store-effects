@@ -11,7 +11,8 @@ import { Topping } from "../../models/topping.model";
 @Component({
   selector: "product-item",
   styleUrls: ["product-item.component.scss"],
-  template: `
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `,
     <div class="product-item">
       <pizza-form
         [pizza]="pizza$ | async"
@@ -23,8 +24,7 @@ import { Topping } from "../../models/topping.model";
       >
         <pizza-display [pizza]="visualise$ | async"> </pizza-display>
       </pizza-form>
-    </div>
-  `,
+    </div> `,
 })
 export class ProductItemComponent implements OnInit {
   pizza$: Observable<Pizza>;
